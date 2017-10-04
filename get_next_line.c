@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 09:56:49 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/03 17:08:17 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/03 17:14:57 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ int		get_next_line(const int fd, char **line)
 	}
 	free(buffer);
 	if (ret == 0)
+	{
+		free(leftover);
 		return (0);
+	}
 	return (ret < 0 ? -1 : done_reading(&leftover, line));
 }
