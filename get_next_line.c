@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 09:56:49 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/03 16:34:36 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/03 17:00:39 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int	done_reading(char **leftover, char **line)
 	if (!(*line = ft_strdup(*leftover)))
 		return (-1);
 	free(*leftover);
-	return (1);
+	return (0);
 }
 
 int		get_next_line(const int fd, char **line)
