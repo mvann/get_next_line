@@ -6,36 +6,11 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 09:56:49 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/03 17:14:57 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/04 13:23:23 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h> //##############################################
-
-// char	*new_fd_str(t_list **lst, int fd)
-// {
-// 	t_fd_str *fd_str;
-//
-// 	fd_str = (t_fd_str *)malloc(t_fd_str);
-// 	fd_str->fd = fd;
-// 	fd_str->str = (char *)malloc(BUFF_SIZE);
-// 	return ((*lst)->str);
-// }
-//
-// static char	*get_fd_str(t_list **lst, int fd)
-// {
-// 	if ((*lst)
-//
-// 	if (!(*lst))
-// 	{
-// 		lst = ft_lstnew(new_fd_str(fd), sizeof(t_fd_str));
-// 		return (new_fd_str(&lst, fd));
-// 	}
-// 	if (lst->content->fd == fd)
-// 		return (lst->content->str);
-// 	return get_fd_str(lst->next, fd);
-// }
 
 static int	check_leftover(char **leftover, char **line)
 {
@@ -58,48 +33,62 @@ static int	check_leftover(char **leftover, char **line)
 
 static int	append(char **leftover, char **buffer)
 {
-	char *tmp;
+	char	*tmp;
+	int		i;
 
 	if (!(tmp = ft_strjoin(*leftover, *buffer)))
+	{
+		free(*buffer);
 		return (0);
+	}
 	free(*leftover);
 	*leftover = tmp;
+	i = 0;
+	while (i < BUFF_SIZE)
+		(*buffer)[i++] = 0;
 	return (1);
 }
 
 static int	done_reading(char **leftover, char **line)
 {
+	int ret;
+
+	if ((ret = check_leftover(leftover, line)))
+		return (ret);
+	if (ft_strlen(*leftover) == 0)
+		return (0);
 	if (!(*line = ft_strdup(*leftover)))
 		return (-1);
 	free(*leftover);
+	*leftover = NULL;
 	return (1);
 }
 
-int		get_next_line(const int fd, char **line)
+int			get_next_line(const int fd, char **line)
 {
-	static char		*leftover;
+	static char		*leftover[40000];
 	char			*buffer;
 	int				ret;
 
-	if (!leftover)
-		if (!(leftover = ft_strnew(BUFF_SIZE)))
+	if (fd < 0)
+		return (-1);
+	if (!leftover[fd])
+		if (!(leftover[fd] = ft_strnew(BUFF_SIZE)))
 			return (-1);
+	if ((ret = check_leftover(leftover + fd, line)))
+		return (ret);
 	if (!(buffer = ft_strnew(BUFF_SIZE)))
 		return (-1);
-	if ((ret = check_leftover(&leftover, line)))
-		return (ret);
-	while((ret = read(fd, buffer, BUFF_SIZE)))
+	while ((ret = read(fd, buffer, BUFF_SIZE)))
 	{
-		if (ret < 0 || !append(&leftover, &buffer))
+		if (ret < 0 || !append(leftover + fd, &buffer))
 			return (-1);
-		if ((ret = check_leftover(&leftover, line)))
+		if ((ret = check_leftover(leftover + fd, line)))
+		{
+			free(buffer);
 			return (ret);
+		}
 	}
 	free(buffer);
-	if (ret == 0)
-	{
-		free(leftover);
-		return (0);
-	}
-	return (ret < 0 ? -1 : done_reading(&leftover, line));
+	return (done_reading(leftover + fd, line));
 }
