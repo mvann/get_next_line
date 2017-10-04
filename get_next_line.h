@@ -6,7 +6,7 @@
 /*   By: mvann <mvann@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 10:14:44 by mvann             #+#    #+#             */
-/*   Updated: 2017/10/04 12:17:47 by mvann            ###   ########.fr       */
+/*   Updated: 2017/10/04 13:26:50 by mvann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "libft/libft.h"
 # define BUFF_SIZE 20
-# define FD_ARR_SIZE 6000
 
 typedef struct		s_fd_str
 {
