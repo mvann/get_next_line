@@ -1,5 +1,5 @@
-# fillit
-A C program that finds the smallest square that a set of tetrominos can occupy.  
+# get_next_line  
+A C function that reads one line of a file.  
 A part of the 42 curriculum.  
-Subject: fillit.en.pdf  
-Completed October, 2017
+Subject: get_next_line.en.pdf  
+Completed November, 2017
